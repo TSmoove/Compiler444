@@ -243,17 +243,26 @@
 		}
 
 		public String get_str() {
-			return null;
+			System.out.println("C get_str.");
+			  int beg = m_tbeg;
+			  int end = m_cr.mCxIndex - 1;
+			  int len = 1 + end - beg;
+			  return m_cr.mLine.substring(beg, len); 
 
 		}
 
 		public String get_str2() {
-			return null;
+			System.out.println("C get_str.");
+			  int beg = 1 + m_tbeg;
+			  int end = m_cr.mCxIndex - 1;
+			  int len = 1 + end - beg;
+			  return m_cr.mLine.substring( beg, len ); 
 
 		}
 
 		public void next_line() {
-
+			System.out.println("L next_line.");
+			  m_cr.nextChar(true);
 		}
 
 		public Character peekChar() {

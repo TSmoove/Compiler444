@@ -102,11 +102,42 @@ public class Token {
 			
 			
 			public void read(){
-				//refer to buffer reader for file
-				
-				//br.readline()
-				
-				//TO DO
+				System.out.println("A1_token::read"); 
+				  String sline;
+				  getline( g_tk_fin, sline );
+				  stringstream ssline( sline );
+				  do { // Once.
+				    String str;
+				    ssline >> str;
+				    DOUT DZ( str ) ENDLDOUT;
+				    if ("(A1_token:" != str) { perr( "header", str ); break; }
+				    ssline >> str;
+				    DOUT DZ( str ) ENDLDOUT;
+				    if ("m_enum=" != str) { perr( "enum key", str ); break; }
+				    int ienum;
+				    ssline >> ienum;
+				    if (ienum != ienum % KTERMINALS_SIZE) { perr( "enum val", str ); break; }
+				    m_enum = g_akenums[ ienum ];
+				    DOUT DZ( m_enum ) ENDLDOUT;
+				    ssline >> str;
+				    DOUT DZ( str ) ENDLDOUT;
+				    if ("m_line_num=" != str) { perr( "line_num key", str ); break; }
+				    ssline >> m_line_num;
+				    DOUT DZ( m_line_num ) ENDLDOUT;
+				    ssline >> str;
+				    DOUT DZ( str ) ENDLDOUT;
+				    if ("m_str=" != str) { perr( "line_num key", str ); break; }
+				    // Get the token's string field.
+				    size_t qpos1 = sline.find( '"' );
+				    if (string::npos == qpos1) { perr( "double-quote" ); break; }
+				    size_t qpos2 = sline.find( '"', 1 + qpos1 );
+				    if (string::npos == qpos2) { perr( "2nd double-quote" ); break; }
+				    int len = qpos2 - qpos1 - 1;
+				    DOUT DZ( len ) ENDLDOUT;
+				    m_str = sline.substr( 1 + qpos1, len );
+				    DOUT DZ( m_str ) ENDLDOUT;
+				  } while (0); // Once.
+				  // show( );
 			};
 			
 			public void show(){
