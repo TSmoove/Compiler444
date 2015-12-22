@@ -1,11 +1,13 @@
+
 import java.io.BufferedReader;
+import java.io.EOFException;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
 
 public class A1_charist {
-	public A1_charist(){
+	public A1_charist(BufferedReader br){
 		mLineLength = 0;
 		mIndex = 0;
 		mLineNum = 0;
@@ -13,15 +15,16 @@ public class A1_charist {
 		mCxIndex = 0;
 		mEOF = 0;
 		mLine = "";
+		mFileIn = br;
 	}
 	
 	//========================================================= NEXT CHARACTER ========== (done, might be problem converting int to boolean)
 	
 	public Character nextChar(boolean rSkipLine){
 		//rSkipLine = 0 is false
-		System.out.println("C nextChar." + rSkipLine);
-		System.out.println(mIndex + " "+ mLineLength);
-		Character retval = 0;
+		System.out.println("A2_CharManipulate nextChar()~ skipline? " + rSkipLine);
+		System.out.println("mIndex =" + mIndex + " mLineLength = "+ mLineLength);
+		Character retval = null;
 		if (rSkipLine  || mIndex>= mLineLength){
 			mLineLength = 0;//force new Line
 			
@@ -33,13 +36,14 @@ public class A1_charist {
 			mIndex = -1;
 		} //Update line if needed
 		
-		System.out.println(mIndex + " " + mLineLength);
+		System.out.println("mIndex= "+ mIndex + " mLineLength= " + mLineLength);
 		if(mLineLength !=0 ){
-			retval = mLine.charAt(mIndex);
+			retval = mLine.charAt(++mIndex);
 		}
+		System.out.println("DOES IT HAVE SPACES" + mLine);
 		System.out.println(retval);
-		mCxIndex = mIndex++;
-		System.out.println(mCxIndex + " "+ mIndex);
+		mCxIndex = mIndex;
+		System.out.println("mCxIndex= " + mCxIndex + " mIndex = "+ mIndex);
 		
 		return retval; 
 		
@@ -48,25 +52,27 @@ public class A1_charist {
 	
 	//======================================================  OPEN FILE ================== (done, might have conversion problems)
 	
-	public void openFile(){
+	public BufferedReader openFile(){
 		try {
 			mFileIn = new BufferedReader(new FileReader(mFileName));
 		} catch (FileNotFoundException e) {
 			System.out.println("Open File");
 			e.printStackTrace();
 		}
+		return mFileIn;
 	};
 	
 	
 	//=========================================== PEEK CHARACTER ================================ (done, maybe don't use println and print on same line)
 	
 	public Character peekChar(){
-		System.out.println("C peekChar. ");
 		Character retval = 0;
+		System.out.println("CX INDEX= " +mCxIndex);
 		if(mIndex > mCxIndex){
 			retval = mLine.charAt(mIndex);
 		}
-		System.out.println(retval);
+		System.out.println("C peekChar. " + "retval = " + retval + "BLAH");
+		//System.out.println(retval);
 		return retval;
 	};
 
@@ -78,17 +84,17 @@ public class A1_charist {
 	
 	//====================================================== NEXT LINE ============= (relatively done)
 	
-	public int nextLine(){
+	public int nextLine() {
 		System.out.println("C nextLine. ");
-		mLineLength = 0;
-		while(mLineLength==0){
+		mLineLength = null;
+		while(mLineLength == null){
 			
 			try {
 				if((mLine = mFileIn.readLine()) == null){
 						//END OF FILE
 						System.out.println("Lexer: EOF");
 						mEOF = 1;
-						break;
+						
 					
 				}
 			} catch (IOException e) { // I/O Error
@@ -96,9 +102,12 @@ public class A1_charist {
 				e.printStackTrace();//Block later
 				System.exit(1);
 			}
+			if (mLine!=null)
 			mLineLength = mLine.length();
+			else mLineLength =0;
 			++mLineNum;
-			System.out.println(mLineNum + mLineLength + mLine);
+			mCxIndex=-1; mIndex =-1;
+			System.out.println("mLineNum= "+ mLineNum + " mLineLength= "+ mLineLength +" mLine= " + mLine);
 		}
 		return mLineLength;//TODO
 		
@@ -128,4 +137,7 @@ public class A1_charist {
 	
 	
 } // END OF A1_CHARIST CLASS
+
+
+
 

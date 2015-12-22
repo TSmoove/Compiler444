@@ -1,4 +1,6 @@
+
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
@@ -13,26 +15,39 @@ public class main {
 		// run next token til end of program
 
 		// save tokenSeq
-		/*
-		A1_Lexer lx = new A1_Lexer();
 		
-		lx.m_cr.mFileName = "filename";
+		BufferedReader br = null;
+		ArrayList<String> tokens = null;
+		try {
+			br = new BufferedReader(new FileReader("C:\\temp\\testing.txt"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		A1_Lexer lx = new A1_Lexer(br);
+		lx.m_cr.mFileName = "C:\\temp\\testing.txt";
 		
-		lx.m_cr.openFile();
+		//br = lx.m_cr.openFile();
 		String error = "ERROR";
+		tokens = new ArrayList<String>();
 		
 		if(true){ //file opens without errors CHECK LATER
-			Token tk = new Token();
+			Token tk = new Token(br);
 			do{ 
+				System.out.println("EOF? 1 or 0: " +lx.m_cr.mEOF);
 				tk = lx.next_token();
 				tk.show();
-				
-			}while(!error.equals(tk.mEnum.ERROR) || lx.m_cr.mEOF!= 1);
+				tokens.add(tk.returnTokens());
+			}while(!error.equals(tk.mEnum.ERROR) && lx.m_cr.mEOF != 1);
 		}
-		*/
 		
+		System.out.println("OUTPUT FILE");
+		for(int i = 0; i < tokens.size(); i++){
+			System.out.println(tokens.get(i));
+			
+		}
 
-		try (BufferedReader br = new BufferedReader(new FileReader("C:\\temp\\testing.txt")))
+		/*try (BufferedReader br = new BufferedReader(new FileReader("C:\\temp\\testing.txt")))
 		{
 
 			String sCurrentLine;
@@ -48,6 +63,6 @@ public class main {
 
 		} catch (IOException e) {
 			e.printStackTrace();
-		} 
+		}*/ 
 	}
 }
